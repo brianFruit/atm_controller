@@ -5,8 +5,9 @@ from datetime import datetime
 
 
 class Card:
-    def __init__(self, customer_name, expiration_date, card_type, security_code):
+    def __init__(self, customer_name, card_number, expiration_date, card_type, security_code):
         self.customer_name = customer_name
+        self.card_number = card_number
         self.expiration_date = expiration_date
         self.card_type = card_type
         self.security_code = security_code
@@ -77,7 +78,7 @@ class ATMManager:
         self._current_account = None
 
     def authorize_card(self, card, pin):
-        # Connect bank API here to authorize user
+        # Connect bank API here to authorize user based on card info and pin
         account = [Account(0, 'Checking'), Account(100, 'Saving')]
         return True, account
 
@@ -112,7 +113,7 @@ class ATMManager:
 
 if __name__ == '__main__':
     atm = ATMManager()
-    card = Card('Brian', '10/30/2020', 'debit', 123)
+    card = Card('Brian', '0000000000000000', '10/30/2020', 'debit', 123)
     atm.insert_card(card, 4321)
 
     print("Welcome %s" % atm.get_customer_name())
