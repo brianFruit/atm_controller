@@ -95,6 +95,13 @@ class ATMManager:
                 return acc.withdraw(amount, 'cash withdrawal')
         return False
 
+    def check_balance(self, account_descriptor):
+        if self._current_account is not None:
+            for acc in self._current_account:
+                if acc.account_descriptor == account_descriptor:
+                    return acc.account_balance
+        return False
+
     def run_hardware_test(self):
         # Add hw tests
         return True
@@ -118,16 +125,16 @@ if __name__ == '__main__':
 
     print("Welcome %s" % atm.get_customer_name())
 
-    print("Before deposit %s" % atm.get_all_accounts()[0].account_balance)
+    print("Before deposit: %s" % atm.check_balance("Checking"))
     atm.deposit_cash('Checking')
     atm.deposit_cash('Checking')
-    print("After x2 deposit %s" % atm.get_all_accounts()[0].account_balance)
-    assert atm.get_all_accounts()[0].account_balance == (20 + 20)
+    print("After deposit of $20 twice: %s" % atm.check_balance("Checking"))
+    assert atm.check_balance("Checking") == (20 + 20)
 
-    print("Before withdrawal %s" % atm.get_all_accounts()[1].account_balance)
+    print("Before withdrawal: %s" % atm.check_balance("Saving"))
     atm.withdraw_cash('Saving', 99)
-    print("After withdrawal %s" % atm.get_all_accounts()[1].account_balance)
-    assert atm.get_all_accounts()[1].account_balance == (100 - 99)
+    print("After withdrawal of $99: %s" % atm.check_balance("Saving"))
+    assert atm.check_balance("Saving") == (100 - 99)
 
     atm.eject_card()
     assert atm.get_all_accounts() == None
